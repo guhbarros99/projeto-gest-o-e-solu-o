@@ -247,7 +247,7 @@ header {
     max-width: 1200px;
     margin: 110px auto;
     height: 700px;
-    background-image: url(../img/technology1.jpg);
+    background-image: url(.../img/technology1.jpg);
 }
 
 .btn_down {
@@ -322,7 +322,7 @@ header {
     text-align: center;
     text-align: justify;
     line-height: 1.6rem;
-    background-image: url(../img/grafico5.jpg);
+    background-image: url(.../img/grafico5.jpg);
 }
 
 .text-container-ind p {
@@ -374,7 +374,7 @@ h2 {
     max-width: 1200px;
     margin: 0 auto;
     height: 700px;
-    background-image: url(../img/conosco1.jpg);
+    background-image: url(./img/conosco1.jpg);
 }
 
 .container-fale-conosco::before {

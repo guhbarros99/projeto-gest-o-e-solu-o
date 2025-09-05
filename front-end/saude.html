@@ -25,7 +25,7 @@
         href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Raleway:ital,wght@0,100..900;1,100..900&family=Tangerine:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -34,7 +34,6 @@
             <nav class="navbar">
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="download.html">Downloads</a></li>
                     <li><a href="sobre.html">Sobre Nós</a></li>
                     <li class="myDropdown dropdown"><a href="#">Setores</a>
                         <div class="dropdown-content">
@@ -46,6 +45,7 @@
                     </li>
                     <li><a href="contato.html">Contato</a></li>
                     <li><a href="back-end/cadastro/login.php"><button class="btn-cadastre" id="btn_acessar">Login</button></a></li>
+
                 </ul>
 
                 <div class="logo">
@@ -59,32 +59,27 @@
 
     <main>
         <div class="container-global">
+            <div class="global-image">
+                <img src="./img/saude1.png" alt="Imagem de um hospital moderno utilizando novas tecnologias">
+            </div>
 
-            <div class="text-container-var">
-
+            <div class="text-container-saude">
+                
                 <div class="content-global-text">
-                    <h2 class="title-global">Mercado Varejista</h2>
+                    <h2 class="title-global">Área da Saúde</h2>
                     <p>
-                        Gestão de estoque é essencial para manter o controle eficiente do inventário,
-                        evitando faltas e excessos, e melhorando a rotatividade. A experiência do cliente
-                        é aprimorada por meio da personalização de ofertas e promoções, com base nas
-                        preferências dos consumidores. A análise de vendas fornece insights sobre
-                        tendências e desempenho de produtos, apoiando decisões estratégicas.
-                        A gestão de fornecedores garante uma coordenação eficaz, otimizando
-                        o reabastecimento. Por fim, a eficiência operacional é alcançada com
-                        a automação de tarefas administrativas, melhorando a eficiência geral
-                        da loja.
+                        Gerenciamento de pacientes permite o registro e acesso fácil a informações detalhadas,
+                         melhorando o atendimento e a continuidade dos cuidados. O agendamento de consultas é 
+                         otimizado para reduzir cancelamentos. O gerenciamento de inventário médico assegura 
+                         controle preciso de suprimentos, garantindo disponibilidade e conformidade. A 
+                         conformidade com regulamentações envolve o acompanhamento das normas de saúde e 
+                         segurança. Por fim, a análise de desempenho monitora a eficácia dos tratamentos e 
+                         serviços, possibilitando melhorias contínuas na qualidade do atendimento.
                     </p>
                 </div>
             </div>
-
-            <div class="global-image">
-                <img src="./img/varejista2.png" alt="Imagem de consumidores varejistas">
-            </div>
-
-
         </div>
-        
+       
     </main>
 
     <footer>
@@ -106,7 +101,7 @@
         </div>
     </footer>
 
-    <script src="./js/pi.js"></script>
+    <script src="../js/pi.js"></script>
 </body>
 
 </html>

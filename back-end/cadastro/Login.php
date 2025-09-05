@@ -54,6 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="password" id="senha" name="senha" required>
             
             <button type="submit">Entrar</button>
+        <a href="Cadastro.php">Cadastrar Empresa</a>
+        <a href="/projeto-gest-o-e-solu-o/front-end/index.html">Voltar</a>
         </form>
 
         <?php
@@ -64,8 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         ?>
         
-        <a href="Cadastro.php">Cadastrar Empresa</a>
-        <a href="projeto-gest-o-e-solu-o/index.html">Voltar</a>
     </div>
 
 </body>
