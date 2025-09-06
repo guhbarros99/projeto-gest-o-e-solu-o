@@ -15,9 +15,11 @@ require_once __DIR__ . '/../database/database.php';
 class CampoDAO{
     private $conn;
 
-    public function __construct() {
-        $this->conn = Database::getConnection();
-    }
+// CÓDIGO CORRETO ✅
+public function __construct() {
+    // O nome correto do método é getConn()
+    $this->conn = Database::getInstance()->getConn(); 
+}
 
     public function cadastrarCampo(Campo $campo) {
         $query = "INSERT INTO campo (nome, descricao, nivel, cor, id_empresa) VALUES (:nome, :descricao, :nivel, :cor, :id_empresa)";
@@ -119,7 +121,7 @@ class CampoDAO{
     }
     
     function adicionarCamposPadrao(int $id_empresa) {
-    $conn = Database::getConnection();
+    $conn = Database::getInstance();
 
     $camposPadrao = [
         ['nome' => 'Funcionarios', 'descricao' => 'Gestão de funcionários', 'nivel' => 1, 'cor' => '#FF5733'],

@@ -17,7 +17,7 @@ class DadosDAO
 
     public function __construct()
     {
-        $this->conn = Database::getConnection();
+            $this->conn = Database::getInstance()->getConn();
     }
 
     public function cadastrarDado(Dados $dados): bool

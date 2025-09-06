@@ -11,12 +11,12 @@
 require_once __DIR__ . '/../database/Database.php';
 class EmpresaDAO
 {
-    
+
     private $conn;
 
     public function __construct()
     {
-        $this->conn = Database::getConnection();
+        $this->conn = Database::getInstance()->getConn();
     }
 
     public function buscarEmpresaPorEmail(string $email)
@@ -92,16 +92,17 @@ class EmpresaDAO
         return null;
     }
 
-    
 
 
-   
-    public function cadastrarEmpresa(Empresa $empresa) {
+
+
+    public function cadastrarEmpresa(Empresa $empresa)
+    {
         $query = "INSERT INTO empresa (nome, email, cnpj, senha, token) VALUES (:nome, :email, :cnpj, :senha, :token)";
         $stmt = $this->conn->prepare($query);
 
         $nome = $empresa->getNome();
-        $email = $empresa->getEmail();  
+        $email = $empresa->getEmail();
         $cnpj = $empresa->getCnpj();
         $senha = password_hash($empresa->getSenha(), PASSWORD_DEFAULT);
         $token = $empresa->getToken();
@@ -119,7 +120,8 @@ class EmpresaDAO
             return false;
         }
     }
-    public function verificarEmpresaCnpjExistente(string $cnpj): bool {
+    public function verificarEmpresaCnpjExistente(string $cnpj): bool
+    {
         $query = "SELECT COUNT(*) FROM empresa WHERE cnpj = :cnpj";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':cnpj', $cnpj);
@@ -128,7 +130,8 @@ class EmpresaDAO
         return $count > 0;
     }
 
-    public function verificarEmpresaEmailExistente(string $email): bool {
+    public function verificarEmpresaEmailExistente(string $email): bool
+    {
         $query = "SELECT COUNT(*) FROM empresa WHERE email = :email";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':email', $email);
@@ -137,7 +140,8 @@ class EmpresaDAO
         return $count > 0;
     }
 
-    public function UpdateEmpresa(Empresa $empresa) {
+    public function UpdateEmpresa(Empresa $empresa)
+    {
         $query = "UPDATE empresa SET nome = :nome, email = :email, cnpj = :cnpj, senha = :senha, token = :token WHERE id = :id";
         $stmt = $this->conn->prepare($query);
 
@@ -161,5 +165,4 @@ class EmpresaDAO
             return false;
         }
     }
-
 }

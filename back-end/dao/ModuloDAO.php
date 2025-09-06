@@ -7,7 +7,7 @@ class ModuloDAO
 
     public function __construct()
     {
-        $this->conn = Database::getConnection();
+        $this->conn = Database::getInstance()->getConn();
     }
 
     public function adicionarModulo($modulo)

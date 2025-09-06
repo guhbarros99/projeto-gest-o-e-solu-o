@@ -6,26 +6,30 @@
 //     FOREIGN KEY (id_modulo) REFERENCES modulo(id) ON DELETE CASCADE
 // );
 
-class CardDAO{
+class CardDAO
+{
     private $conn;
 
-    public function __construct() {
-        $this->conn = Database::getConnection();
+    public function __construct()
+    {
+        $this->conn = Database::getInstance()->getConn();
     }
-    public function cadastrarCard(Card $card) {
+    public function cadastrarCard(Card $card)
+    {
         $sql = "INSERT INTO cards (titulo, id_modulo) VALUES (:titulo, :id_modulo)";
         $stmt = $this->conn->prepare($sql);
-       
+
         $titulo = $card->getTitulo();
         $id_modulo = $card->getIdModulo();
         $stmt->bindParam(':titulo', $titulo);
         $stmt->bindParam(':id_modulo', $id_modulo, PDO::PARAM_INT);
 
-        
+
         return $stmt->execute();
     }
 
-    public function listarCardsPorModulo($id_modulo) {
+    public function listarCardsPorModulo($id_modulo)
+    {
         $sql = "SELECT * FROM cards WHERE id_modulo = :id_modulo";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':id_modulo', $id_modulo, PDO::PARAM_INT);
@@ -39,6 +43,3 @@ class CardDAO{
         return $cards;
     }
 }
-
-
-?>

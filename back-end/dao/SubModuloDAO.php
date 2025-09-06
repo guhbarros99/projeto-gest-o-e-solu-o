@@ -8,7 +8,7 @@ class SubmoduloDAO
 
     public function __construct()
     {
-        $this->conn = Database::getConnection();
+        $this->conn = Database::getInstance()->getConn();
     }
 
     // CREATE
