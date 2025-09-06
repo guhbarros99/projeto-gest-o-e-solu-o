@@ -40,39 +40,38 @@ $logo = $logoController->getImagemPorEmpresa($idEmpresa);
 $campos = $camposDAO->listarCamposPorEmpresa($idEmpresa);
 $empresa = $empresaDAO->buscarEmpresaPorId($idEmpresa);
 
-// Inicialização de variáveis para evitar erros
+// Lógica para carregar módulos e cards
 $modulos = [];
-$modulo = null; // Iniciar como null para poder verificar depois
-
-// Lógica para carregar módulos de um campo específico
+$modulo = null;
 if (isset($_GET['id'])) {
-    $id_campo = $_GET['id'];
-    $modulos = $moduloDAO->listarModulosPorCampo($id_campo, $idEmpresa);
+    $modulos = $moduloDAO->listarModulosPorCampo($_GET['id'], $idEmpresa);
 }
-
-// Lógica para carregar um módulo específico
 if (isset($_GET['id_modulo'])) {
     $modulo = $moduloDAO->getById($_GET['id_modulo']);
 }
 
-// Lógica da busca global
+
+// --- LÓGICA DA BUSCA GLOBAL ---
 $termo_pesquisado = $_GET['busca'] ?? '';
 $pagina_atual = (int)($_GET['pagina'] ?? 1);
-if ($pagina_atual < 1) {
-    $pagina_atual = 1;
-}
 
+// CORREÇÃO: Vamos criar dois arrays para separar os resultados
+$resultados_modulos = [];
+$resultados_outros = [];
 
-$resultados = [];
 if (!empty($termo_pesquisado)) {
-    // CORREÇÃO: Obtenha a conexão do banco de dados ANTES de chamar a função.
     $conexao = Database::getInstance()->getConn();
+    $todos_resultados = buscarEmTodoBanco($conexao, $termo_pesquisado, $pagina_atual);
 
-    // Agora, passe a conexão obtida para a função.
-    $resultados = buscarEmTodoBanco($conexao, $termo_pesquisado, $pagina_atual);
+    // CORREÇÃO: Percorremos os resultados e separamo-los
+    foreach ($todos_resultados as $item) {
+        if ($item['tipo_resultado'] === 'Módulo') {
+            $resultados_modulos[] = $item;
+        } else {
+            $resultados_outros[] = $item;
+        }
+    }
 }
-// ...
-
 // Define o caminho do logo com uma imagem padrão caso não encontre
 $logoPath = ($logo && file_exists($logo->getCaminho()))
     ? $logo->getCaminho()
@@ -107,8 +106,7 @@ $logoPath = ($logo && file_exists($logo->getCaminho()))
             </div>
             <div class="search-bar">
                 <form action="home.php" method="GET">
-                    <i class="fas fa-search"></i>
-                    <input type="text" name="busca" placeholder="Pesquisa" value="<?= htmlspecialchars($termo_pesquisado) ?>" required>
+                    <i class="fas fa-search"></i> <input type="text" name="busca" placeholder="Pesquisa" value="<?= htmlspecialchars($termo_pesquisado) ?>" required>
                 </form>
             </div>
         </header>
@@ -132,12 +130,24 @@ $logoPath = ($logo && file_exists($logo->getCaminho()))
 
         <main class="main-content">
 
-            <?php if (!empty($termo_pesquisado)): ?>
-                <div class="search-results">
-                    <h2>Resultados para "<?= htmlspecialchars($termo_pesquisado) ?>"</h2>
-                    <?php if (empty($resultados)): ?>
-                        <p class="not-found">Nenhum resultado encontrado.</p>
-                    <?php else: ?>
+           <?php if (!empty($termo_pesquisado)): ?>
+                
+                <h2>Resultados da busca por "<?= htmlspecialchars($termo_pesquisado) ?>"</h2>
+
+                <?php if (!empty($resultados_modulos)): ?>
+                    <div class="modulos-encontrados">
+                        <h3>Módulos Encontrados:</h3>
+                        <ul>
+                            <?php foreach ($resultados_modulos as $mod): ?>
+                                <li><a href="?id_modulo=<?= htmlspecialchars($mod['id_encontrado']); ?>"><?= htmlspecialchars($mod['texto_encontrado']); ?></a></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($resultados_outros)): ?>
+                    <div class="outros-resultados">
+                        <h3>Outros Resultados:</h3>
                         <table>
                             <thead>
                                 <tr>
@@ -148,7 +158,7 @@ $logoPath = ($logo && file_exists($logo->getCaminho()))
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($resultados as $item): ?>
+                                <?php foreach ($resultados_outros as $item): ?>
                                     <tr>
                                         <td><?= htmlspecialchars($item['tipo_resultado']) ?></td>
                                         <td><?= htmlspecialchars($item['id_encontrado']) ?></td>
@@ -158,18 +168,26 @@ $logoPath = ($logo && file_exists($logo->getCaminho()))
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
-                        <div class="paginacao">
-                            <?php if ($pagina_atual > 1): ?>
-                                <a href="?busca=<?= urlencode($termo_pesquisado) ?>&pagina=<?= $pagina_atual - 1 ?>">Página Anterior</a>
-                            <?php endif; ?>
+                    </div>
+                <?php endif; ?>
 
-                            <?php if (count($resultados) == 5): // ATENÇÃO: Bug lógico permanece, mas funcional para a maioria dos casos 
-                            ?>
-                                <a href="?busca=<?= urlencode($termo_pesquisado) ?>&pagina=<?= $pagina_atual + 1 ?>" style="float: right;">Próxima Página</a>
-                            <?php endif; ?>
-                        </div>
-                    <?php endif; ?>
-                </div>
+                <?php if (empty($resultados_modulos) && empty($resultados_outros)): ?>
+                    <p class="not-found">Nenhum resultado encontrado para a sua busca.</p>
+                <?php endif; ?>
+                
+                <?php else: ?>
+                <?php if ($modulo): ?>
+                    <h2>Detalhes do Módulo: <?= htmlspecialchars($modulo->getNome()); ?></h2>
+                <?php elseif (!empty($modulos)): ?>
+                     <h2>Módulos:</h2>
+                     <ul>
+                        <?php foreach ($modulos as $mod): ?>
+                           <li><a href="?id_modulo=<?= $mod->getId(); ?>"><?= htmlspecialchars($mod->getNome()); ?></a></li>
+                        <?php endforeach; ?>
+                     </ul>
+                <?php else: ?>
+                    <p>Bem-vindo! Selecione um campo na barra lateral ou utilize a busca.</p>
+                <?php endif; ?>
             <?php endif; ?>
 
 
